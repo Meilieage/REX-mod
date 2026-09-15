@@ -4,7 +4,7 @@
 
 它们是原目录五类用途的替代实现，不是对原加密文件的解密，也不保证与原版所有选项完全一致。原目录作者信息与参考来源见下文。
 
-## 五个文件
+## 五个独立模块
 
 | 文件 | 用途 | 实际范围与限制 |
 | --- | --- | --- |
@@ -27,13 +27,25 @@
 
 ## 导入与托管
 
-仓库采用 `Meilieage/REX-mod` 的 `main` 分支，五个明文脚本位于 `modules` 目录。
+仓库地址：[Meilieage/REX-mod](https://github.com/Meilieage/REX-mod)，分支为 `main`。
 
-仓库地址：[Meilieage/REX-mod](https://github.com/Meilieage/REX-mod)。
+### 推荐先验证：影视合集单脚本
 
-### 添加单个模块
+[添加 Meilieage · 影视合集](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-library.js)
 
-如果当前入口是“添加模块”，请填入下面某个以 `modules/` 开始的脚本地址。这些文件包含 `WidgetMetadata` 和实际处理函数。
+复制以下完整地址，粘贴到之前成功添加骨朵单模块的同一个入口：
+
+```text
+https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-library.js
+```
+
+这个文件本身包含四个影视模块的完整实现、一个 `WidgetMetadata`，以及五个列表菜单和影视搜索入口。它不需要先解析资源库目录，也不动态下载执行其他脚本。菜单为骨朵日榜、热门/趋势/高分、分类与地区片单、按平台筛选、欧美榜单。
+
+合集与单独脚本是两种使用方式，选择一种即可，避免显示重复功能。合集仍需 REX 实机验证；已有的成功反馈仅针对骨朵单模块。
+
+弹幕保持单独添加：[Meilieage 个人弹幕](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-danmu.js)。首次使用仍须填写自己的兼容服务地址。
+
+### 备选：分别添加五个单模块
 
 | 模块 | 脚本地址 |
 | --- | --- |
@@ -43,19 +55,22 @@
 | 欧美榜单 | [meilieage-western.js](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-western.js) |
 | 个人弹幕 | [meilieage-danmu.js](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-danmu.js) |
 
-### 添加资源库目录
+### 目录导入问题的已知状态
 
-只有在客户端明确支持资源库或订阅目录的入口，才使用完整目录地址：
+用户提供的 REX 版本截图为 **0.1.0（10）**。本次反馈与复核：
 
-```text
-https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.fwd
-```
+- `modules/meilieage-guduo.js` 可以添加；这不等于其数据加载已经实机验证。
+- 本仓库 `REX.js` 及改名后的 `REX.fwd` 均提示“模块校验失败”。
+- 原作者的 `MakkaPakka.js` 在同一个入口可以添加。重新读取发现，它与本仓库修正版目录同为 `title / description / icon / widgets` 的 JSON 结构，条目字段也一致。
+- 因此，先前将问题归为“.js 扩展名不适用于目录”或“该入口不支持 JSON 目录”的判断缺少依据，现明确更正。补图标、改为 `.fwd` 未解决本次问题。
+- 已观察到托管服务器响应类型不同，但没有 REX 客户端日志或校验器证据，不能据此断言根因。
+- 新增影视合集是绕过目录导入的替代方案，**不表示已修好原目录导入**。
 
-`REX.fwd` 按 Forward 官方资源库示例提供 `title`、`description`、`icon`、`widgets`；图标托管于本仓库。根目录 `REX.js` 保留相同 JSON 内容作为兼容别名。两者都是资源库目录，不能当成单个 JavaScript 模块执行。
+根目录 `REX.js`、`REX.fwd` 和 `assets/icon.png` 暂保留，当前不再把两个目录地址推荐为已验证可用的导入方案。
 
-2026-09-15 的实际反馈：在同一个添加入口，根目录 REX.js 立即提示“模块校验失败”，而 modules/meilieage-guduo.js 可以添加。该对照说明至少骨朵单模块的下载和格式正常，问题集中在资源库目录导入或入口识别；不能据此断言图标字段是根因。原说明未明确区分资源库目录与单模块地址，现已修正，并补充与官方示例一致的 .fwd 目录和图标。其余四个模块及 .fwd 目录仍需客户端逐项验证。
+### 后续维护
 
-维护时保留 `REX.fwd`、兼容别名 `REX.js`、`assets` 与 `modules` 的目录层级。修改模块后同步更新两个目录文件与模块版本号，并在客户端刷新来源；仓库名、分支或文件名变化时，同步调整对应地址。
+使用合集时，修改 `modules/meilieage-library.js` 内对应功能的代码和配置，并更新其版本后在客户端刷新。合集是静态文件，修改独立模块不会自动同步到合集；若两种形式都维护，需要同步对应实现。保留模块 ID，避免客户端把更新识别成另一个模块。
 
 ## 数据与兼容性边界
 
@@ -64,7 +79,7 @@ https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.fwd
 3. 骨朵榜单在测试时，2026-09-14 数据暂空，2026-09-13 四类各返回20条。模块会在指定范围内查找最近有数据的日期，显示原榜日期和名次，不冒充当日数据。
 4. 同名作品无法明确匹配时省略，并说明原因，因此展示数量可能少于原榜。电影/剧集的编号与类别一并保留，避免同号错绑。
 5. 弹幕模块不内置陌生服务或他人的访问密钥；需要你已有的兼容服务。官方弹弹play开放平台有应用认证要求，不能把公开接口地址等同于匿名可用服务。服务器提供的繁简转换不等于模块自带完整转换能力。
-6. 实现依据是 ForwardWidget 官方公开协议与原作者公开模块所用的接口形式。尚未找到 REX 完整公开模块规范，也未在你的 REX 客户端实际导入，兼容性需要手机端验证。
+6. 实现依据是 ForwardWidget 官方公开协议与原作者公开模块所用的接口形式。尚未找到 REX 完整公开模块规范。用户已确认骨朵单模块可添加；其余模块、合集及实际交互仍需要手机端验证。
 
 ## 参考来源
 
@@ -84,6 +99,8 @@ https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.fwd
 - 影视发现与平台片单：26组本地隔离模拟测试通过；覆盖分页、类型、动态分类/平台匹配、歧义、缓存和异常响应。
 - 个人弹幕：10组本地模拟测试通过；覆盖并发、集数隔离、缺少服务配置、屏蔽词、去重、排序、数量与颜色设置。
 - 欧美榜单：实测烂番茄电影页、剧集页各解析28条；匹配、分页、异常、榜单类型隔离及错误配置测试通过。FlixPatrol 在上述测试网络中返回403，该记录不能证明该来源目前可用。
-- 未验证：REX客户端实际导入和交互、客户端真实TMDB调用、用户弹幕服务连接。需要实际导入后逐项验证，不能把本地模拟通过视为手机端已经可用。
+- 影视合集：14 组本地集成检查通过；46 个原顶层名称无冲突；同一上下文顺序调用五个列表入口和搜索入口，结果及请求参数与原独立脚本一致；导入时无网络请求。使用受控响应及 Node VM，不能代表 REX 实机验证。
+- 手机端反馈：REX 0.1.0（10）可添加骨朵单模块，原作者目录也可添加；本仓库两个 JSON 目录仍校验失败。
+- 未验证：其余单模块及新合集的实机导入和交互、客户端真实 TMDB 调用、用户弹幕服务连接。不能把本地模拟通过视为手机端已经可用。
 
 弹幕版本只支持完整的弹弹play p/m JSON响应；未实现XML、分段弹幕或本地完整繁简转换。
