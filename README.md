@@ -27,19 +27,13 @@
 
 ## 导入与托管
 
-仓库采用 `Meilieage/REX-mod` 的 `main` 分支，资源库目录为根目录的 `REX.js`，五个模块位于 `modules` 目录。
+仓库采用 `Meilieage/REX-mod` 的 `main` 分支，五个明文脚本位于 `modules` 目录。
 
 仓库地址：[Meilieage/REX-mod](https://github.com/Meilieage/REX-mod)。
 
-REX 资源库导入地址：
+### 添加单个模块
 
-```text
-https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.js
-```
-
-将该地址填入 REX 的资源库或来源网址入口后，查看目录中的五个模块并选择添加。客户端入口名称、导入及交互仍需在实际使用的 REX 版本中验证；尚未完成手机端实测。
-
-如需单独添加模块，可使用下表地址：
+如果当前入口是“添加模块”，请填入下面某个以 `modules/` 开始的脚本地址。这些文件包含 `WidgetMetadata` 和实际处理函数。
 
 | 模块 | 脚本地址 |
 | --- | --- |
@@ -49,7 +43,19 @@ https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.js
 | 欧美榜单 | [meilieage-western.js](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-western.js) |
 | 个人弹幕 | [meilieage-danmu.js](https://raw.githubusercontent.com/Meilieage/REX-mod/main/modules/meilieage-danmu.js) |
 
-维护时保留 `REX.js` 与 `modules` 的目录层级。修改模块后同步更新资源目录和模块文件的版本号，并在客户端刷新来源；仓库名、分支或文件名变化时，同步调整 `REX.js` 中的对应地址。
+### 添加资源库目录
+
+只有在客户端明确支持资源库或订阅目录的入口，才使用完整目录地址：
+
+```text
+https://raw.githubusercontent.com/Meilieage/REX-mod/main/REX.fwd
+```
+
+`REX.fwd` 按 Forward 官方资源库示例提供 `title`、`description`、`icon`、`widgets`；图标托管于本仓库。根目录 `REX.js` 保留相同 JSON 内容作为兼容别名。两者都是资源库目录，不能当成单个 JavaScript 模块执行。
+
+2026-09-15 的实际反馈：在同一个添加入口，根目录 REX.js 立即提示“模块校验失败”，而 modules/meilieage-guduo.js 可以添加。该对照说明至少骨朵单模块的下载和格式正常，问题集中在资源库目录导入或入口识别；不能据此断言图标字段是根因。原说明未明确区分资源库目录与单模块地址，现已修正，并补充与官方示例一致的 .fwd 目录和图标。其余四个模块及 .fwd 目录仍需客户端逐项验证。
+
+维护时保留 `REX.fwd`、兼容别名 `REX.js`、`assets` 与 `modules` 的目录层级。修改模块后同步更新两个目录文件与模块版本号，并在客户端刷新来源；仓库名、分支或文件名变化时，同步调整对应地址。
 
 ## 数据与兼容性边界
 
